@@ -28,12 +28,13 @@ import (
 
 func main() {
     client := fio.NewClient("mytoken", nil)
+
     opts := fio.ByPeriodOptions{
-		DateFrom: time.Now(),
-		DateTo:   time.Now(),
+        DateFrom: time.Now(),
+        DateTo:   time.Now(),
     }
-    
-	resp, err := client.Transactions.ByPeriod(context.Background(), opts)
+
+    resp, err := client.Transactions.ByPeriod(context.Background(), opts)
     if err != nil {
         log.Fatal(err)
     }
