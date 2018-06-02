@@ -97,7 +97,7 @@ type ErrorResponse struct {
 
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %v",
-		r.Response.Request.Method, SanitizeURL(r.Token, r.Response.Request.URL),
+		r.Response.Request.Method, sanitizeURL(r.Token, r.Response.Request.URL),
 		r.Response.StatusCode, r.Message)
 }
 
@@ -131,12 +131,17 @@ func (c *Client) checkResponse(r *http.Response) error {
 	return resp
 }
 
-// SanitizeURL redacts the token part of the URL.
-func SanitizeURL(token string, u *url.URL) *url.URL {
+// sanitizeURL redacts the token part of the URL.
+func sanitizeURL(token string, u *url.URL) *url.URL {
+	if token == "" {
+		return u
+	}
+
 	urlStr := u.String()
 	if strings.Contains(urlStr, token) {
 		urlStr = strings.Replace(urlStr, token, "REDACTED", -1)
 	}
+
 	redactedURL, _ := url.Parse(urlStr)
 	return redactedURL
 }
