@@ -88,7 +88,7 @@ func (c *Client) buildURL(resource string, segments ...string) string {
 	return u.String()
 }
 
-// ErrorResponse wraps http reponse errors.
+// ErrorResponse wraps http response errors.
 type ErrorResponse struct {
 	Response *http.Response
 	Message  string
