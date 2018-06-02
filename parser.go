@@ -28,8 +28,20 @@ const (
 	fieldOrderID            = "ID pokynu"
 	fieldAuthor             = "Provedl"
 
-	xmlTimeFormat = "2006-01-02Z07:00"
+	xmlTimeFormat = "2006-01-02-07:00"
 )
+
+var (
+	xmlGMTLocation *time.Location
+)
+
+func init() {
+	loc, err := time.LoadLocation("GMT")
+	if err != nil {
+		panic(err)
+	}
+	xmlGMTLocation = loc
+}
 
 type xmlErrorResponse struct {
 	XMLName xml.Name       `xml:"response"`
@@ -86,7 +98,7 @@ func (t *xmlTime) UnmarshalXML(dec *xml.Decoder, start xml.StartElement) error {
 		return err
 	}
 
-	tt, err := time.Parse(xmlTimeFormat, v)
+	tt, err := parseGMTTime(v)
 	if err != nil {
 		return err
 	}
@@ -160,7 +172,7 @@ func parseTransaction(t xmlTtransaction) (*Transaction, error) {
 			}
 			tx.ID = v
 		case fieldDate:
-			v, err := parseDate(col.Value)
+			v, err := parseGMTTime(col.Value)
 			if err != nil {
 				return nil, err
 			}
@@ -211,6 +223,6 @@ func parseInteger(s string) (int64, error) {
 	return strconv.ParseInt(s, 10, 64)
 }
 
-func parseDate(s string) (time.Time, error) {
-	return time.Parse(xmlTimeFormat, s)
+func parseGMTTime(s string) (time.Time, error) {
+	return time.ParseInLocation(xmlTimeFormat, s, xmlGMTLocation)
 }

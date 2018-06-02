@@ -81,8 +81,8 @@ func TestByPeriod(t *testing.T) {
 				BIC:            "FIOZSKBAXXX",
 				OpeningBalance: openingBalance,
 				ClosingBalance: closingBalance,
-				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.Local),
-				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.Local),
+				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
+				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
 				IDFrom:         13926601410,
 				IDTo:           13926601410,
 				IDLastDownload: 0,
@@ -91,7 +91,7 @@ func TestByPeriod(t *testing.T) {
 			Transactions: []Transaction{
 				{
 					ID:                 13926601410,
-					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.Local),
+					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
 					Amount:             closingBalance,
 					Currency:           "EUR",
 					Account:            "SK2183100000001100248431",
@@ -108,7 +108,7 @@ func TestByPeriod(t *testing.T) {
 			},
 		}
 
-		assert.Equal(t, resp, want)
+		assertEqualTransactionsResp(t, want, resp)
 	}
 }
 
@@ -171,8 +171,8 @@ func TestGetStatement(t *testing.T) {
 				BIC:            "FIOZSKBAXXX",
 				OpeningBalance: openingBalance,
 				ClosingBalance: closingBalance,
-				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.Local),
-				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.Local),
+				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
+				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
 				IDFrom:         13926601410,
 				IDTo:           13926601410,
 				IDLastDownload: 0,
@@ -181,7 +181,7 @@ func TestGetStatement(t *testing.T) {
 			Transactions: []Transaction{
 				{
 					ID:                 13926601410,
-					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.Local),
+					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
 					Amount:             closingBalance,
 					Currency:           "EUR",
 					Account:            "SK2183100000001100248431",
@@ -198,6 +198,47 @@ func TestGetStatement(t *testing.T) {
 			},
 		}
 
-		assert.Equal(t, resp, want)
+		assertEqualTransactionsResp(t, want, resp)
 	}
+}
+
+func assertEqualTransactionsResp(t *testing.T, want *TransactionsResponse, resp *TransactionsResponse) {
+	assert.Equal(t, want.Info.AccountID, resp.Info.AccountID)
+	assert.Equal(t, want.Info.BankID, resp.Info.BankID)
+	assert.Equal(t, want.Info.Currency, resp.Info.Currency)
+	assert.Equal(t, want.Info.IBAN, resp.Info.IBAN)
+	assert.Equal(t, want.Info.BIC, resp.Info.BIC)
+	assert.Equal(t, want.Info.OpeningBalance, resp.Info.OpeningBalance)
+	assert.Equal(t, want.Info.ClosingBalance, resp.Info.ClosingBalance)
+	assert.Equal(t, want.Info.IDFrom, resp.Info.IDFrom)
+	assert.Equal(t, want.Info.IDTo, resp.Info.IDTo)
+	assert.Equal(t, want.Info.IDLastDownload, resp.Info.IDLastDownload)
+	assert.Equal(t, want.Info.IDList, resp.Info.IDList)
+
+	assert.True(t, want.Info.DateStart.Equal(resp.Info.DateStart))
+	assert.True(t, want.Info.DateEnd.Equal(resp.Info.DateEnd))
+
+	assert.Equal(t, len(want.Transactions), len(resp.Transactions))
+
+	for i, tx := range want.Transactions {
+		assertEqualTransaction(t, tx, resp.Transactions[i])
+	}
+}
+
+func assertEqualTransaction(t *testing.T, want Transaction, got Transaction) {
+	assert.Equal(t, want.ID, got.ID)
+	assert.Equal(t, want.Amount, got.Amount)
+	assert.Equal(t, want.Currency, got.Currency)
+	assert.Equal(t, want.Account, got.Account)
+	assert.Equal(t, want.AccountName, got.AccountName)
+	assert.Equal(t, want.BankName, got.BankName)
+	assert.Equal(t, want.RecipientMessage, got.RecipientMessage)
+	assert.Equal(t, want.ConstantSymbol, got.ConstantSymbol)
+	assert.Equal(t, want.BIC, got.BIC)
+	assert.Equal(t, want.OrderID, got.OrderID)
+	assert.Equal(t, want.Comment, got.Comment)
+	assert.Equal(t, want.UserIdentification, got.UserIdentification)
+	assert.Equal(t, want.Type, got.Type)
+
+	assert.True(t, want.Date.Equal(got.Date))
 }
