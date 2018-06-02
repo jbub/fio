@@ -1,4 +1,4 @@
-# fio [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/jbub/fio) [![Build Status](http://img.shields.io/travis/jbub/fio.svg?style=flat-square)](https://travis-ci.org/jbub/fio) [![Coverage Status](http://img.shields.io/coveralls/jbub/fio.svg?style=flat-square)](https://coveralls.io/r/jbub/fio) [![Go Report Card](https://goreportcard.com/badge/github.com/jbub/fio)](https://goreportcard.com/report/github.com/jbub/fio)
+# fio [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/jbub/fio) [![Build Status](https://travis-ci.org/jbub/fio.svg?branch=master)](https://travis-ci.org/jbub/fio) [![Coverage Status](https://coveralls.io/repos/github/jbub/fio/badge.svg?branch=master)](https://coveralls.io/github/jbub/fio?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/jbub/fio)](https://goreportcard.com/report/github.com/jbub/fio)
 
 API client for Fio Banka written in Go.
 
