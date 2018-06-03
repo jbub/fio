@@ -40,7 +40,7 @@ func TestSanitizeURL(t *testing.T) {
 	for _, c := range sanitizeURLCases {
 		t.Run(c.token+c.original+c.want, func(t *testing.T) {
 			urlOrig := &url.URL{Path: c.original}
-			urlGot := sanitizeURL(c.token, urlOrig)
+			urlGot := SanitizeURL(c.token, urlOrig)
 			assert.Equal(t, c.want, urlGot.Path)
 		})
 	}
