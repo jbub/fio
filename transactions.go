@@ -16,7 +16,7 @@ type TransactionsResponse struct {
 	Transactions []Transaction
 }
 
-// StatementInfo represents accout statement info.
+// StatementInfo represents account statement info.
 type StatementInfo struct {
 	AccountID      int64
 	BankID         string

@@ -148,7 +148,8 @@ func TestGetStatement(t *testing.T) {
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
 		require.Equal(t, http.MethodGet, r.Method)
-		fmt.Fprint(w, transactionsResponse)
+		_, err := fmt.Fprint(w, transactionsResponse)
+		require.NoError(t, err)
 	})
 
 	opts := GetStatementOptions{

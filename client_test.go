@@ -45,5 +45,3 @@ func TestSanitizeURL(t *testing.T) {
 		})
 	}
 }
-
-
