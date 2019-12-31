@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const transactionsResponse = `
@@ -58,7 +58,7 @@ func TestByPeriod(t *testing.T) {
 	urlStr := fmt.Sprintf("/ib_api/rest/periods/%v/%v/%v/transactions.xml", testingToken, fmtDate(dateFrom), fmtDate(dateTo))
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method)
+		require.Equal(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, transactionsResponse)
 	})
 
@@ -68,48 +68,48 @@ func TestByPeriod(t *testing.T) {
 	}
 	resp, err := client.Transactions.ByPeriod(context.Background(), opts)
 
-	if assert.NoError(t, err, "Transactions.ByPeriod returned error") {
-		openingBalance, _ := decimal.NewFromString("0.00")
-		closingBalance, _ := decimal.NewFromString("45.97")
+	require.NoError(t, err)
 
-		want := &TransactionsResponse{
-			Info: StatementInfo{
-				AccountID:      2501201133,
-				BankID:         "8330",
-				Currency:       "EUR",
-				IBAN:           "SK2383300000002501201133",
-				BIC:            "FIOZSKBAXXX",
-				OpeningBalance: openingBalance,
-				ClosingBalance: closingBalance,
-				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
-				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
-				IDFrom:         13926601410,
-				IDTo:           13926601410,
-				IDLastDownload: 0,
-				IDList:         0,
-			},
-			Transactions: []Transaction{
-				{
-					ID:                 13926601410,
-					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
-					Amount:             closingBalance,
-					Currency:           "EUR",
-					Account:            "SK2183100000001100248431",
-					AccountName:        "john doe",
-					BankName:           "ZUNO BANK AG, pobočka zahraničnej banky",
-					RecipientMessage:   "/DO2017-04-10/SPPrevod zo zuno, john doe",
-					ConstantSymbol:     "0558",
-					BIC:                "RIDBSKBXXXX",
-					OrderID:            "15689512949",
-					Comment:            "john doe",
-					UserIdentification: "john doe",
-					Type:               "Bezhotovostní příjem",
-				},
-			},
-		}
+	openingBalance, _ := decimal.NewFromString("0.00")
+	closingBalance, _ := decimal.NewFromString("45.97")
 
-		assertEqualTransactionsResp(t, want, resp)
+	want := &TransactionsResponse{
+		Info: StatementInfo{
+			AccountID:      2501201133,
+			BankID:         "8330",
+			Currency:       "EUR",
+			IBAN:           "SK2383300000002501201133",
+			BIC:            "FIOZSKBAXXX",
+			OpeningBalance: openingBalance,
+			ClosingBalance: closingBalance,
+			DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
+			DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
+			IDFrom:         13926601410,
+			IDTo:           13926601410,
+			IDLastDownload: 0,
+			IDList:         0,
+		},
+		Transactions: []Transaction{
+			{
+				ID:                 13926601410,
+				Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
+				Amount:             closingBalance,
+				Currency:           "EUR",
+				Account:            "SK2183100000001100248431",
+				AccountName:        "john doe",
+				BankName:           "ZUNO BANK AG, pobočka zahraničnej banky",
+				RecipientMessage:   "/DO2017-04-10/SPPrevod zo zuno, john doe",
+				ConstantSymbol:     "0558",
+				BIC:                "RIDBSKBXXXX",
+				OrderID:            "15689512949",
+				Comment:            "john doe",
+				UserIdentification: "john doe",
+				Type:               "Bezhotovostní příjem",
+			},
+		},
 	}
+
+	assertEqualTransactionsResp(t, want, resp)
 }
 
 func TestExport(t *testing.T) {
@@ -122,7 +122,7 @@ func TestExport(t *testing.T) {
 	urlStr := fmt.Sprintf("/ib_api/rest/periods/%v/%v/%v/transactions.%v", testingToken, fmtDate(dateFrom), fmtDate(dateTo), testingFormat)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method)
+		require.Equal(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, transactionsResponse)
 	})
 
@@ -134,9 +134,8 @@ func TestExport(t *testing.T) {
 	}
 	err := client.Transactions.Export(context.Background(), opts, buf)
 
-	if assert.NoError(t, err, "Transactions.Export returned error") {
-		assert.Equal(t, len(transactionsResponse), buf.Len())
-	}
+	require.NoError(t, err)
+	require.Equal(t, len(transactionsResponse), buf.Len())
 }
 
 func TestGetStatement(t *testing.T) {
@@ -148,7 +147,7 @@ func TestGetStatement(t *testing.T) {
 	urlStr := fmt.Sprintf("/ib_api/rest/by-id/%v/%v/%v/transactions.xml", testingToken, year, id)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		assert.Equal(t, http.MethodGet, r.Method)
+		require.Equal(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, transactionsResponse)
 	})
 
@@ -158,67 +157,65 @@ func TestGetStatement(t *testing.T) {
 	}
 	resp, err := client.Transactions.GetStatement(context.Background(), opts)
 
-	if assert.NoError(t, err, "Transactions.GetStatement returned error") {
-		openingBalance, _ := decimal.NewFromString("0.00")
-		closingBalance, _ := decimal.NewFromString("45.97")
+	require.NoError(t, err)
 
-		want := &TransactionsResponse{
-			Info: StatementInfo{
-				AccountID:      2501201133,
-				BankID:         "8330",
-				Currency:       "EUR",
-				IBAN:           "SK2383300000002501201133",
-				BIC:            "FIOZSKBAXXX",
-				OpeningBalance: openingBalance,
-				ClosingBalance: closingBalance,
-				DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
-				DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
-				IDFrom:         13926601410,
-				IDTo:           13926601410,
-				IDLastDownload: 0,
-				IDList:         0,
-			},
-			Transactions: []Transaction{
-				{
-					ID:                 13926601410,
-					Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
-					Amount:             closingBalance,
-					Currency:           "EUR",
-					Account:            "SK2183100000001100248431",
-					AccountName:        "john doe",
-					BankName:           "ZUNO BANK AG, pobočka zahraničnej banky",
-					RecipientMessage:   "/DO2017-04-10/SPPrevod zo zuno, john doe",
-					ConstantSymbol:     "0558",
-					BIC:                "RIDBSKBXXXX",
-					OrderID:            "15689512949",
-					Comment:            "john doe",
-					UserIdentification: "john doe",
-					Type:               "Bezhotovostní příjem",
-				},
-			},
-		}
+	openingBalance, _ := decimal.NewFromString("0.00")
+	closingBalance, _ := decimal.NewFromString("45.97")
 
-		assertEqualTransactionsResp(t, want, resp)
+	want := &TransactionsResponse{
+		Info: StatementInfo{
+			AccountID:      2501201133,
+			BankID:         "8330",
+			Currency:       "EUR",
+			IBAN:           "SK2383300000002501201133",
+			BIC:            "FIOZSKBAXXX",
+			OpeningBalance: openingBalance,
+			ClosingBalance: closingBalance,
+			DateStart:      time.Date(2017, time.January, 1, 0, 0, 0, 0, time.FixedZone("+0100", 60*60)),
+			DateEnd:        time.Date(2017, time.May, 1, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
+			IDFrom:         13926601410,
+			IDTo:           13926601410,
+			IDLastDownload: 0,
+			IDList:         0,
+		},
+		Transactions: []Transaction{
+			{
+				ID:                 13926601410,
+				Date:               time.Date(2017, time.April, 11, 0, 0, 0, 0, time.FixedZone("+0200", 60*60*2)),
+				Amount:             closingBalance,
+				Currency:           "EUR",
+				Account:            "SK2183100000001100248431",
+				AccountName:        "john doe",
+				BankName:           "ZUNO BANK AG, pobočka zahraničnej banky",
+				RecipientMessage:   "/DO2017-04-10/SPPrevod zo zuno, john doe",
+				ConstantSymbol:     "0558",
+				BIC:                "RIDBSKBXXXX",
+				OrderID:            "15689512949",
+				Comment:            "john doe",
+				UserIdentification: "john doe",
+				Type:               "Bezhotovostní příjem",
+			},
+		},
 	}
+
+	assertEqualTransactionsResp(t, want, resp)
 }
 
 func assertEqualTransactionsResp(t *testing.T, want *TransactionsResponse, resp *TransactionsResponse) {
-	assert.Equal(t, want.Info.AccountID, resp.Info.AccountID)
-	assert.Equal(t, want.Info.BankID, resp.Info.BankID)
-	assert.Equal(t, want.Info.Currency, resp.Info.Currency)
-	assert.Equal(t, want.Info.IBAN, resp.Info.IBAN)
-	assert.Equal(t, want.Info.BIC, resp.Info.BIC)
-	assert.Equal(t, want.Info.OpeningBalance, resp.Info.OpeningBalance)
-	assert.Equal(t, want.Info.ClosingBalance, resp.Info.ClosingBalance)
-	assert.Equal(t, want.Info.IDFrom, resp.Info.IDFrom)
-	assert.Equal(t, want.Info.IDTo, resp.Info.IDTo)
-	assert.Equal(t, want.Info.IDLastDownload, resp.Info.IDLastDownload)
-	assert.Equal(t, want.Info.IDList, resp.Info.IDList)
-
-	assert.True(t, want.Info.DateStart.Equal(resp.Info.DateStart))
-	assert.True(t, want.Info.DateEnd.Equal(resp.Info.DateEnd))
-
-	assert.Equal(t, len(want.Transactions), len(resp.Transactions))
+	require.Equal(t, want.Info.AccountID, resp.Info.AccountID)
+	require.Equal(t, want.Info.BankID, resp.Info.BankID)
+	require.Equal(t, want.Info.Currency, resp.Info.Currency)
+	require.Equal(t, want.Info.IBAN, resp.Info.IBAN)
+	require.Equal(t, want.Info.BIC, resp.Info.BIC)
+	require.Equal(t, want.Info.OpeningBalance, resp.Info.OpeningBalance)
+	require.Equal(t, want.Info.ClosingBalance, resp.Info.ClosingBalance)
+	require.Equal(t, want.Info.IDFrom, resp.Info.IDFrom)
+	require.Equal(t, want.Info.IDTo, resp.Info.IDTo)
+	require.Equal(t, want.Info.IDLastDownload, resp.Info.IDLastDownload)
+	require.Equal(t, want.Info.IDList, resp.Info.IDList)
+	require.True(t, want.Info.DateStart.Equal(resp.Info.DateStart))
+	require.True(t, want.Info.DateEnd.Equal(resp.Info.DateEnd))
+	require.Equal(t, len(want.Transactions), len(resp.Transactions))
 
 	for i, tx := range want.Transactions {
 		assertEqualTransaction(t, tx, resp.Transactions[i])
@@ -226,19 +223,18 @@ func assertEqualTransactionsResp(t *testing.T, want *TransactionsResponse, resp 
 }
 
 func assertEqualTransaction(t *testing.T, want Transaction, got Transaction) {
-	assert.Equal(t, want.ID, got.ID)
-	assert.Equal(t, want.Amount, got.Amount)
-	assert.Equal(t, want.Currency, got.Currency)
-	assert.Equal(t, want.Account, got.Account)
-	assert.Equal(t, want.AccountName, got.AccountName)
-	assert.Equal(t, want.BankName, got.BankName)
-	assert.Equal(t, want.RecipientMessage, got.RecipientMessage)
-	assert.Equal(t, want.ConstantSymbol, got.ConstantSymbol)
-	assert.Equal(t, want.BIC, got.BIC)
-	assert.Equal(t, want.OrderID, got.OrderID)
-	assert.Equal(t, want.Comment, got.Comment)
-	assert.Equal(t, want.UserIdentification, got.UserIdentification)
-	assert.Equal(t, want.Type, got.Type)
-
-	assert.True(t, want.Date.Equal(got.Date))
+	require.Equal(t, want.ID, got.ID)
+	require.Equal(t, want.Amount, got.Amount)
+	require.Equal(t, want.Currency, got.Currency)
+	require.Equal(t, want.Account, got.Account)
+	require.Equal(t, want.AccountName, got.AccountName)
+	require.Equal(t, want.BankName, got.BankName)
+	require.Equal(t, want.RecipientMessage, got.RecipientMessage)
+	require.Equal(t, want.ConstantSymbol, got.ConstantSymbol)
+	require.Equal(t, want.BIC, got.BIC)
+	require.Equal(t, want.OrderID, got.OrderID)
+	require.Equal(t, want.Comment, got.Comment)
+	require.Equal(t, want.UserIdentification, got.UserIdentification)
+	require.Equal(t, want.Type, got.Type)
+	require.True(t, want.Date.Equal(got.Date))
 }

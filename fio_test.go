@@ -30,8 +30,8 @@ func setup() {
 
 	// github client configured to use test server
 	client = NewClient(testingToken, nil)
-	url, _ := url.Parse(server.URL)
-	client.BaseURL = url
+	u, _ := url.Parse(server.URL)
+	client.BaseURL = u
 }
 
 // teardown closes the test HTTP server.

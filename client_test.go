@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -41,7 +41,9 @@ func TestSanitizeURL(t *testing.T) {
 		t.Run(c.token+c.original+c.want, func(t *testing.T) {
 			urlOrig := &url.URL{Path: c.original}
 			urlGot := SanitizeURL(c.token, urlOrig)
-			assert.Equal(t, c.want, urlGot.Path)
+			require.Equal(t, c.want, urlGot.Path)
 		})
 	}
 }
+
+
