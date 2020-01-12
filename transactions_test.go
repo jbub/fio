@@ -35,19 +35,19 @@ const transactionsResponse = `
       <column_1 name="Objem" id="1">45.97</column_1>
       <column_14 name="Měna" id="14">EUR</column_14>
       <column_2 name="Protiúčet" id="2">SK2183100000001100248431</column_2>
-	  <column_3 id="3" name="Kód banky">2010</column_3>
+      <column_3 id="3" name="Kód banky">2010</column_3>
       <column_10 name="Název protiúčtu" id="10">john doe</column_10>
       <column_12 name="Název banky" id="12">ZUNO BANK AG, pobočka zahraničnej banky</column_12>
       <column_4 name="KS" id="4">0558</column_4>
-	  <column_5 name="VS" id="5">0001</column_5>
-	  <column_6 name="SS" id="6">0002</column_6>
+      <column_5 name="VS" id="5">0001</column_5>
+      <column_6 name="SS" id="6">0002</column_6>
       <column_7 name="Uživatelská identifikace" id="7">john doe</column_7>
       <column_16 name="Zpráva pro příjemce" id="16">/DO2017-04-10/SPPrevod zo zuno, john doe</column_16>
       <column_8 name="Typ" id="8">Bezhotovostní příjem</column_8>
       <column_25 name="Komentář" id="25">john doe</column_25>
       <column_26 name="BIC" id="26">RIDBSKBXXXX</column_26>
       <column_17 name="ID pokynu" id="17">15689512949</column_17>
-	  <column_18 name="Upřesnění" id="18">45.97 EUR</column_18>
+      <column_18 name="Upřesnění" id="18">45.97 EUR</column_18>
     </Transaction>
   </TransactionList>
 </AccountStatement>
