@@ -10,23 +10,27 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// https://www.fio.cz/docs/cz/API_Bankovnictvi.pdf
 const (
-	fieldTransactionID      = "ID pohybu"
-	fieldDate               = "Datum"
-	fieldAmount             = "Objem"
-	fieldCurrency           = "Měna"
-	fieldAccount            = "Protiúčet"
-	fieldAccountName        = "Název protiúčtu"
-	fieldBankName           = "Název banky"
-	fieldVariableSymbol     = "VS"
-	fieldConstantSymbol     = "KS"
-	fieldUserIdentification = "Uživatelská identifikace"
-	fieldRecipientMessage   = "Zpráva pro příjemce"
-	fieldType               = "Typ"
-	fieldComment            = "Komentář"
-	fieldBIC                = "BIC"
-	fieldOrderID            = "ID pokynu"
-	fieldAuthor             = "Provedl"
+	fieldTransactionID      = "22" // ID pohybu
+	fieldDate               = "0"  // Datum
+	fieldAmount             = "1"  // Objem
+	fieldCurrency           = "14" // Měna
+	fieldAccount            = "2"  // Protiúčet
+	fieldAccountName        = "10" // Název protiúčtu
+	fieldBankCode           = "3"  // Kód banky
+	fieldBankName           = "12" // Název banky
+	fieldConstantSymbol     = "4"  // KS
+	fieldVariableSymbol     = "5"  // VS
+	fieldSpecificSymbol     = "6"  // SS
+	fieldUserIdentification = "7"  // Uživatelská identifikace
+	fieldRecipientMessage   = "16" // Zpráva pro příjemce
+	fieldType               = "8"  // Typ pohybu
+	fieldSpecification      = "18" // Upřesnění
+	fieldComment            = "25" // Komentář
+	fieldBIC                = "26" // BIC
+	fieldOrderID            = "17" // ID pokynu
+	fieldAuthor             = "9"  // Provedl
 
 	xmlTimeFormat = "2006-01-02-07:00"
 )
@@ -164,7 +168,7 @@ func parseTransactionsResponse(r io.Reader) (*TransactionsResponse, error) {
 func parseTransaction(t xmlTtransaction) (*Transaction, error) {
 	tx := new(Transaction)
 	for _, col := range t.Columns {
-		switch col.Name {
+		switch col.ID {
 		case fieldTransactionID:
 			v, err := parseInteger(col.Value)
 			if err != nil {
@@ -187,6 +191,8 @@ func parseTransaction(t xmlTtransaction) (*Transaction, error) {
 			tx.Currency = col.Value
 		case fieldAccount:
 			tx.Account = col.Value
+		case fieldBankCode:
+			tx.BankCode = col.Value
 		case fieldAccountName:
 			tx.AccountName = col.Value
 		case fieldBankName:
@@ -195,12 +201,16 @@ func parseTransaction(t xmlTtransaction) (*Transaction, error) {
 			tx.ConstantSymbol = col.Value
 		case fieldVariableSymbol:
 			tx.VariableSymbol = col.Value
+		case fieldSpecificSymbol:
+			tx.SpecificSymbol = col.Value
 		case fieldUserIdentification:
 			tx.UserIdentification = col.Value
 		case fieldRecipientMessage:
 			tx.RecipientMessage = col.Value
 		case fieldType:
 			tx.Type = col.Value
+		case fieldSpecification:
+			tx.Specification = col.Value
 		case fieldComment:
 			tx.Comment = col.Value
 		case fieldBIC:

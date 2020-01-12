@@ -43,11 +43,14 @@ type Transaction struct {
 	Account            string
 	AccountName        string
 	BankName           string
+	BankCode           string
 	ConstantSymbol     string
 	VariableSymbol     string
+	SpecificSymbol     string
 	UserIdentification string
 	RecipientMessage   string
 	Type               string
+	Specification      string
 	Comment            string
 	BIC                string
 	OrderID            string
