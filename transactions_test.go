@@ -48,6 +48,7 @@ const transactionsResponse = `
       <column_26 name="BIC" id="26">RIDBSKBXXXX</column_26>
       <column_17 name="ID pokynu" id="17">15689512949</column_17>
       <column_18 name="Upřesnění" id="18">45.97 EUR</column_18>
+      <column_27 name="Reference plátce" id="27">2000000003</column_27>
     </Transaction>
   </TransactionList>
 </AccountStatement>
@@ -113,6 +114,7 @@ func TestByPeriod(t *testing.T) {
 				Specification:      "45.97 EUR",
 				UserIdentification: "john doe",
 				Type:               "Bezhotovostní příjem",
+				PayerReference:     "2000000003",
 			},
 		},
 	}
@@ -207,6 +209,7 @@ func TestGetStatement(t *testing.T) {
 				Specification:      "45.97 EUR",
 				UserIdentification: "john doe",
 				Type:               "Bezhotovostní příjem",
+				PayerReference:     "2000000003",
 			},
 		},
 	}
@@ -253,5 +256,6 @@ func assertEqualTransaction(t *testing.T, want Transaction, got Transaction) {
 	require.Equal(t, want.Comment, got.Comment)
 	require.Equal(t, want.UserIdentification, got.UserIdentification)
 	require.Equal(t, want.Type, got.Type)
+	require.Equal(t, want.PayerReference, got.PayerReference)
 	require.True(t, want.Date.Equal(got.Date))
 }

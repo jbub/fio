@@ -31,6 +31,7 @@ const (
 	fieldBIC                = "26" // BIC
 	fieldOrderID            = "17" // ID pokynu
 	fieldAuthor             = "9"  // Provedl
+	fieldPayerReference     = "27" // Reference plátce
 
 	xmlTimeFormat = "2006-01-02-07:00"
 )
@@ -217,6 +218,8 @@ func parseTransaction(t xmlTtransaction) (*Transaction, error) {
 			tx.BIC = col.Value
 		case fieldOrderID:
 			tx.OrderID = col.Value
+		case fieldPayerReference:
+			tx.PayerReference = col.Value
 		case fieldAuthor:
 		default:
 			return nil, fmt.Errorf(`unable to parse column: "%v"`, col.Name)

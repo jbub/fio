@@ -54,6 +54,7 @@ type Transaction struct {
 	Comment            string
 	BIC                string
 	OrderID            string
+	PayerReference     string
 }
 
 // ByPeriodOptions represents options passed to ByPeriod.
