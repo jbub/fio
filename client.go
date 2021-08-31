@@ -137,11 +137,7 @@ func SanitizeURL(token string, u *url.URL) *url.URL {
 		return u
 	}
 
-	urlStr := u.String()
-	if strings.Contains(urlStr, token) {
-		urlStr = strings.Replace(urlStr, token, "REDACTED", -1)
-	}
-
-	redactedURL, _ := url.Parse(urlStr)
+	redacted := strings.Replace(u.String(), token, "REDACTED", -1)
+	redactedURL, _ := url.Parse(redacted)
 	return redactedURL
 }
