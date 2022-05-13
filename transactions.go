@@ -183,7 +183,7 @@ type SetLastDownloadIDOptions struct {
 
 // SetLastDownloadID sets the last downloaded id of statement.
 func (s *TransactionsService) SetLastDownloadID(ctx context.Context, opts SetLastDownloadIDOptions) error {
-	urlStr := s.client.buildURL("ib_api/rest/set-last-id", strconv.Itoa(opts.ID))
+	urlStr := s.client.buildURL("ib_api/rest/set-last-id", strconv.Itoa(opts.ID), "")
 	req, err := s.client.get(urlStr)
 	if err != nil {
 		return err
@@ -203,7 +203,7 @@ type SetLastDownloadDateOptions struct {
 
 // SetLastDownloadDate sets the last download date of statement.
 func (s *TransactionsService) SetLastDownloadDate(ctx context.Context, opts SetLastDownloadDateOptions) error {
-	urlStr := s.client.buildURL("ib_api/rest/set-last-date", fmtDate(opts.Date))
+	urlStr := s.client.buildURL("ib_api/rest/set-last-date", fmtDate(opts.Date), "")
 	req, err := s.client.get(urlStr)
 	if err != nil {
 		return err
