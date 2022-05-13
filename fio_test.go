@@ -28,7 +28,7 @@ func setup() {
 	mux = http.NewServeMux()
 	server = httptest.NewServer(mux)
 
-	// github client configured to use test server
+	// fio client configured to use test server
 	client = NewClient(testingToken, nil)
 	u, _ := url.Parse(server.URL)
 	client.BaseURL = u
