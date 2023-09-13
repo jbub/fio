@@ -218,6 +218,8 @@ func TestGetStatement(t *testing.T) {
 }
 
 func assertEqualTransactionsResp(t *testing.T, want *TransactionsResponse, resp *TransactionsResponse) {
+	t.Helper()
+
 	require.Equal(t, want.Info.AccountID, resp.Info.AccountID)
 	require.Equal(t, want.Info.BankID, resp.Info.BankID)
 	require.Equal(t, want.Info.Currency, resp.Info.Currency)
@@ -239,6 +241,8 @@ func assertEqualTransactionsResp(t *testing.T, want *TransactionsResponse, resp 
 }
 
 func assertEqualTransaction(t *testing.T, want Transaction, got Transaction) {
+	t.Helper()
+
 	require.Equal(t, want.ID, got.ID)
 	require.Equal(t, want.Amount, got.Amount)
 	require.Equal(t, want.Currency, got.Currency)

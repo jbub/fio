@@ -71,12 +71,12 @@ type TransactionsService struct {
 // ByPeriod returns transactions in date period.
 func (s *TransactionsService) ByPeriod(ctx context.Context, opts ByPeriodOptions) (*TransactionsResponse, error) {
 	urlStr := s.client.buildURL("ib_api/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), "transactions.xml")
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -96,12 +96,12 @@ type ExportOptions struct {
 func (s *TransactionsService) Export(ctx context.Context, opts ExportOptions, w io.Writer) error {
 	exportFmt := fmt.Sprintf("transactions.%v", opts.Format)
 	urlStr := s.client.buildURL("ib_api/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), exportFmt)
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return err
 	}
@@ -120,12 +120,12 @@ type GetStatementOptions struct {
 // GetStatement returns statement by its year/id.
 func (s *TransactionsService) GetStatement(ctx context.Context, opts GetStatementOptions) (*TransactionsResponse, error) {
 	urlStr := s.client.buildURL("ib_api/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), "transactions.xml")
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -144,12 +144,12 @@ type ExportStatementOptions struct {
 func (s *TransactionsService) ExportStatement(ctx context.Context, opts ExportStatementOptions, w io.Writer) error {
 	exportFmt := fmt.Sprintf("transactions.%v", opts.Format)
 	urlStr := s.client.buildURL("ib_api/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), exportFmt)
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return err
 	}
@@ -162,12 +162,12 @@ func (s *TransactionsService) ExportStatement(ctx context.Context, opts ExportSt
 // SinceLastDownload returns transactions since last download.
 func (s *TransactionsService) SinceLastDownload(ctx context.Context) (*TransactionsResponse, error) {
 	urlStr := s.client.buildURL("ib_api/rest/last", "transactions.xml")
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return nil, err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -184,12 +184,12 @@ type SetLastDownloadIDOptions struct {
 // SetLastDownloadID sets the last downloaded id of statement.
 func (s *TransactionsService) SetLastDownloadID(ctx context.Context, opts SetLastDownloadIDOptions) error {
 	urlStr := s.client.buildURL("ib_api/rest/set-last-id", strconv.Itoa(opts.ID), "")
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return err
 	}
@@ -204,12 +204,12 @@ type SetLastDownloadDateOptions struct {
 // SetLastDownloadDate sets the last download date of statement.
 func (s *TransactionsService) SetLastDownloadDate(ctx context.Context, opts SetLastDownloadDateOptions) error {
 	urlStr := s.client.buildURL("ib_api/rest/set-last-date", fmtDate(opts.Date), "")
-	req, err := s.client.get(urlStr)
+	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
 	}
 
-	resp, err := s.client.do(ctx, req)
+	resp, err := s.client.do(req)
 	if err != nil {
 		return err
 	}

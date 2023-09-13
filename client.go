@@ -42,8 +42,11 @@ type Client struct {
 	Transactions *TransactionsService
 }
 
-// NewRequest prepares new http request.
-func (c *Client) newRequest(method string, urlStr string, body interface{}) (*http.Request, error) {
+func (c *Client) newGetRequest(ctx context.Context, urlStr string) (*http.Request, error) {
+	return c.newRequest(ctx, http.MethodGet, urlStr, nil)
+}
+
+func (c *Client) newRequest(ctx context.Context, method string, urlStr string, body interface{}) (*http.Request, error) {
 	var buf io.ReadWriter
 	if body != nil {
 		buf = new(bytes.Buffer)
@@ -51,24 +54,12 @@ func (c *Client) newRequest(method string, urlStr string, body interface{}) (*ht
 			return nil, err
 		}
 	}
-	return http.NewRequest(method, urlStr, buf)
+	return http.NewRequestWithContext(ctx, method, urlStr, buf)
 }
 
-// Get prepares new GET http request.
-func (c *Client) get(urlStr string) (*http.Request, error) {
-	return c.newRequest(http.MethodGet, urlStr, nil)
-}
-
-// Do performs http request and returns response.
-func (c *Client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
-	req = req.WithContext(ctx)
+func (c *Client) do(req *http.Request) (*http.Response, error) {
 	resp, err := c.client.Do(req)
 	if err != nil {
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		default:
-		}
 		return nil, err
 	}
 
@@ -119,9 +110,8 @@ func (c *Client) checkResponse(r *http.Response) error {
 	// 400 invalid date format in url
 	// 200 ok
 
-	switch {
 	// try to handle validation error
-	case r.StatusCode == http.StatusInternalServerError && strings.Contains(r.Header.Get("Content-Type"), "text/xml"):
+	if r.StatusCode == http.StatusInternalServerError && strings.Contains(r.Header.Get("Content-Type"), "text/xml") {
 		var errResp xmlErrorResponse
 		if err := xml.NewDecoder(r.Body).Decode(&errResp); err == nil {
 			resp.Message = errResp.Result.Message
@@ -137,7 +127,7 @@ func SanitizeURL(token string, u *url.URL) *url.URL {
 		return u
 	}
 
-	redacted := strings.Replace(u.String(), token, "REDACTED", -1)
+	redacted := strings.ReplaceAll(u.String(), token, "REDACTED")
 	redactedURL, _ := url.Parse(redacted)
 	return redactedURL
 }
