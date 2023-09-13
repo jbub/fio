@@ -1,6 +1,6 @@
 # fio 
-[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](http://godoc.org/github.com/jbub/fio) 
-[![Build Status](https://cloud.drone.io/api/badges/jbub/fio/status.svg)](https://cloud.drone.io/jbub/fio)
+[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/jbub/fio) 
+[![Build Status](https://github.com/jbub/fio/actions/workflows/go.yml/badge.svg)](https://github.com/jbub/fio/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jbub/fio)](https://goreportcard.com/report/github.com/jbub/fio)
 
 API client for Fio Banka written in Go.
@@ -13,7 +13,7 @@ go get github.com/jbub/fio
 
 ## Docs
 
-https://godoc.org/github.com/jbub/fio
+https://pkg.go.dev/github.com/jbub/fio
 
 ## Example
 
