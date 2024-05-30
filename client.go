@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	defaultBaseURL = "https://www.fio.cz/"
+	defaultBaseURL = "https://fioapi.fio.cz/"
 	dateFormat     = "2006-01-02"
 )
 
