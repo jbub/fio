@@ -60,7 +60,7 @@ func TestByPeriod(t *testing.T) {
 
 	dateFrom := time.Now()
 	dateTo := time.Now()
-	urlStr := fmt.Sprintf("/ib_api/rest/periods/%v/%v/%v/transactions.xml", testingToken, fmtDate(dateFrom), fmtDate(dateTo))
+	urlStr := fmt.Sprintf("/v1/rest/periods/%v/%v/%v/transactions.xml", testingToken, fmtDate(dateFrom), fmtDate(dateTo))
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
 		require.Equal(t, http.MethodGet, r.Method)
@@ -129,7 +129,7 @@ func TestExport(t *testing.T) {
 	testingFormat := JSONFormat
 	dateFrom := time.Now()
 	dateTo := time.Now()
-	urlStr := fmt.Sprintf("/ib_api/rest/periods/%v/%v/%v/transactions.%v", testingToken, fmtDate(dateFrom), fmtDate(dateTo), testingFormat)
+	urlStr := fmt.Sprintf("/v1/rest/periods/%v/%v/%v/transactions.%v", testingToken, fmtDate(dateFrom), fmtDate(dateTo), testingFormat)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
 		require.Equal(t, http.MethodGet, r.Method)
@@ -154,7 +154,7 @@ func TestGetStatement(t *testing.T) {
 
 	year := 2017
 	id := 1
-	urlStr := fmt.Sprintf("/ib_api/rest/by-id/%v/%v/%v/transactions.xml", testingToken, year, id)
+	urlStr := fmt.Sprintf("/v1/rest/by-id/%v/%v/%v/transactions.xml", testingToken, year, id)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
 		require.Equal(t, http.MethodGet, r.Method)

@@ -70,7 +70,7 @@ type TransactionsService struct {
 
 // ByPeriod returns transactions in date period.
 func (s *TransactionsService) ByPeriod(ctx context.Context, opts ByPeriodOptions) (*TransactionsResponse, error) {
-	urlStr := s.client.buildURL("ib_api/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), "transactions.xml")
+	urlStr := s.client.buildURL("v1/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), "transactions.xml")
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return nil, err
@@ -95,7 +95,7 @@ type ExportOptions struct {
 // Export writes transactions in date period to provided writer.
 func (s *TransactionsService) Export(ctx context.Context, opts ExportOptions, w io.Writer) error {
 	exportFmt := fmt.Sprintf("transactions.%v", opts.Format)
-	urlStr := s.client.buildURL("ib_api/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), exportFmt)
+	urlStr := s.client.buildURL("v1/rest/periods", fmtDate(opts.DateFrom), fmtDate(opts.DateTo), exportFmt)
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
@@ -119,7 +119,7 @@ type GetStatementOptions struct {
 
 // GetStatement returns statement by its year/id.
 func (s *TransactionsService) GetStatement(ctx context.Context, opts GetStatementOptions) (*TransactionsResponse, error) {
-	urlStr := s.client.buildURL("ib_api/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), "transactions.xml")
+	urlStr := s.client.buildURL("v1/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), "transactions.xml")
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return nil, err
@@ -143,7 +143,7 @@ type ExportStatementOptions struct {
 // ExportStatement writes statement by its year/id to provided writer.
 func (s *TransactionsService) ExportStatement(ctx context.Context, opts ExportStatementOptions, w io.Writer) error {
 	exportFmt := fmt.Sprintf("transactions.%v", opts.Format)
-	urlStr := s.client.buildURL("ib_api/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), exportFmt)
+	urlStr := s.client.buildURL("v1/rest/by-id", strconv.Itoa(opts.Year), strconv.Itoa(opts.ID), exportFmt)
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
@@ -183,7 +183,7 @@ type SetLastDownloadIDOptions struct {
 
 // SetLastDownloadID sets the last downloaded id of statement.
 func (s *TransactionsService) SetLastDownloadID(ctx context.Context, opts SetLastDownloadIDOptions) error {
-	urlStr := s.client.buildURL("ib_api/rest/set-last-id", strconv.Itoa(opts.ID), "")
+	urlStr := s.client.buildURL("v1/rest/set-last-id", strconv.Itoa(opts.ID), "")
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
@@ -203,7 +203,7 @@ type SetLastDownloadDateOptions struct {
 
 // SetLastDownloadDate sets the last download date of statement.
 func (s *TransactionsService) SetLastDownloadDate(ctx context.Context, opts SetLastDownloadDateOptions) error {
-	urlStr := s.client.buildURL("ib_api/rest/set-last-date", fmtDate(opts.Date), "")
+	urlStr := s.client.buildURL("v1/rest/set-last-date", fmtDate(opts.Date), "")
 	req, err := s.client.newGetRequest(ctx, urlStr)
 	if err != nil {
 		return err
