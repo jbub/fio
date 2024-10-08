@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/shopspring/decimal"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -63,7 +64,7 @@ func TestByPeriod(t *testing.T) {
 	urlStr := fmt.Sprintf("/v1/rest/periods/%v/%v/%v/transactions.xml", testingToken, fmtDate(dateFrom), fmtDate(dateTo))
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		require.Equal(t, http.MethodGet, r.Method)
+		assert.Equal(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, transactionsResponse)
 	})
 
@@ -132,7 +133,7 @@ func TestExport(t *testing.T) {
 	urlStr := fmt.Sprintf("/v1/rest/periods/%v/%v/%v/transactions.%v", testingToken, fmtDate(dateFrom), fmtDate(dateTo), testingFormat)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		require.Equal(t, http.MethodGet, r.Method)
+		assert.Equal(t, http.MethodGet, r.Method)
 		fmt.Fprint(w, transactionsResponse)
 	})
 
@@ -157,9 +158,9 @@ func TestGetStatement(t *testing.T) {
 	urlStr := fmt.Sprintf("/v1/rest/by-id/%v/%v/%v/transactions.xml", testingToken, year, id)
 
 	mux.HandleFunc(urlStr, func(w http.ResponseWriter, r *http.Request) {
-		require.Equal(t, http.MethodGet, r.Method)
+		assert.Equal(t, http.MethodGet, r.Method)
 		_, err := fmt.Fprint(w, transactionsResponse)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 	})
 
 	opts := GetStatementOptions{

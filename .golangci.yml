@@ -8,8 +8,6 @@ linters:
     - gomnd
     - gochecknoglobals
     - nlreturn
-    - exhaustivestruct
-    - scopelint
     - wsl
     - gci
     - gofumpt
@@ -17,10 +15,12 @@ linters:
     - varnamelen
     - exhaustruct
     - wrapcheck
-    - goerr113
     - lll
     - funlen
     - gochecknoinits
     - cyclop
     - errname
     - dupl
+    - exportloopref
+    - execinquery
+    - err113

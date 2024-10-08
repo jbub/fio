@@ -1,6 +1,6 @@
 module github.com/jbub/fio
 
-go 1.21
+go 1.23
 
 require (
 	github.com/shopspring/decimal v1.3.1
